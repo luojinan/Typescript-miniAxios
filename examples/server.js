@@ -42,8 +42,13 @@ function registerSimpleRouter() {
       msg:'hello world'
     })
   })
+  // 处理get请求的接口
   router.get('/base/get', function(req, res) {
     res.json(req.query)
+  })
+  // 处理post请求的接口
+  router.post('/base/post', function(req, res) {
+    res.json(req.body)
   })
 }
 

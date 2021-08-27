@@ -4,7 +4,7 @@ import { encodeValue, isDateObj, isObj } from "./utils";
 export function buildUrl(url:string, params?:any):any {
   // 没有传递params时,不处理url
   if(!params) {
-    return;
+    return url;
   }
 
   const paramsStringList:string[] = [];
