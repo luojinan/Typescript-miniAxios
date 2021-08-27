@@ -14,7 +14,8 @@ export function buildUrl(url:string, params?:any):any {
     let val = params[key];
     // 1. 过滤null、undefined的值
     if(val === null || typeof val === 'undefined') {
-      return; // 跳出当前循环进行下一循环
+      // NOTE: 注意forin不支持return跳出当前循环,否则相当于整个函数体的retrun。而foreach、forof都是支持return跳出当前循环的
+      continue; // 跳出当前循环进行下一循环
     }
     // 2. 处理数组类型的值 xxx?list[]=a&list[]=b'
     if(Array.isArray(val)) {

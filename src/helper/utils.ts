@@ -6,7 +6,7 @@ export function isDateObj(val: any): val is Date {
 }
 
 export function isObj(val: any): val is Object {
-  return toStringFunc.call(val) === '[object object]'  
+  return toStringFunc.call(val) === '[object Object]'; // 注意第二个object是大些
 }
 
 // encode参数,但保留特殊字符
