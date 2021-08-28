@@ -69,6 +69,36 @@ function registerSimpleRouter() {
       })
     }, 3000)
   })
+
+
+  // 处理get请求的接口
+  router.get('/extend/get', function(req, res) {
+    res.json(req.query)
+  })
+  // 处理post请求的接口
+  router.post('/extend/post', function(req, res) {
+    res.json(req.body)
+  })
+  // 处理post请求的接口
+  router.patch('/extend/patch', function(req, res) {
+    res.json(req.body)
+  })
+  // 处理post请求的接口
+  router.put('/extend/put', function(req, res) {
+    res.json(req.body)
+  })
+  // 处理post请求的接口
+  router.delete('/extend/delete', function(req, res) {
+    res.json(req.body)
+  })
+  // 处理post请求的接口
+  router.options('/extend/options', function(req, res) {
+    res.json(req.body)
+  })
+  // 处理post请求的接口
+  router.head('/extend/head', function(req, res) {
+    res.json(req.body)
+  })
 }
 
 app.use(router)
