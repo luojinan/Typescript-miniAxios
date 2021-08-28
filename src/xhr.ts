@@ -1,3 +1,4 @@
+import { createError } from "./helper/error";
 import { parseHeaders } from "./helper/utils";
 import { AxiosConfig, AxiosPromise } from "./types";
 
@@ -34,7 +35,13 @@ function xhr(config: AxiosConfig): AxiosPromise {
       if(request.status>=200 && request.status<300) {
         resolve(res);
       }else{
-        reject(new Error(`Request failed with status code ${request.status}`))
+        reject(createError(
+          `Request failed with status code ${request.status}`,
+          config,
+          null,
+          request,
+          res,
+        ))
       }
     }
 
@@ -52,11 +59,21 @@ function xhr(config: AxiosConfig): AxiosPromise {
 
     // xhr发送异常
     request.onerror = ()=>{
-      reject(new Error('Network Eroor'))
+      reject(createError(
+        'Network Eroor',
+        config,
+        null,
+        request,
+      ))
     }
     // xhr响应异常 超时
     request.ontimeout = ()=>{
-      reject(new Error(`Timeout of ${timeout}ms exceeded`))
+      reject(createError(
+        `Timeout of ${timeout}ms exceeded`,
+        config,
+        'ECONNABORTED', // 约定俗称的错误标识吗？专门定一个code来给超时情况?
+        request,
+      ))
     }
   })
 }

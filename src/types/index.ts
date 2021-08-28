@@ -31,3 +31,12 @@ export interface AxiosResponse {
 export interface AxiosPromise extends Promise<AxiosResponse> {
 
 }
+
+// 请求promise异常错误信息对象 继承error类
+export interface AxiosError extends Error {
+  config: AxiosConfig, // 请求参数
+  code?: string, // 错误信息关键词？
+  request?: any, // 请求对象 为什么是非必输项
+  response?: AxiosResponse,
+  isAxiosError: boolean, // 不知道哪来干嘛的 跟原生error错误区分？
+}
