@@ -4,14 +4,21 @@ import { AxiosConfig, AxiosPromise } from "./types";
 function xhr(config: AxiosConfig): AxiosPromise {
   return new Promise((resolve,reject)=>{
     // 接收参数method时，给个默认值，否则被字符串字面量类型校验异常
-    const { method = 'get', url, data, headers, responseType } = config;
+    const { method = 'get', url, data, headers, responseType, timeout } = config;
     const request = new XMLHttpRequest();
+    if(timeout) {
+      request.timeout = timeout;
+    }
     request.open(method.toUpperCase(), url, true);
   
     // 编写请求完成resolve逻辑
     request.onreadystatechange=()=>{
       // 请求失败
       if(request.readyState!==4){
+        return;
+      }
+      // 异常和超时都会进来这里onreadystatechange status为0来判断跳出去
+      if(request.status === 0) {
         return;
       }
       // 请求成功
@@ -23,7 +30,12 @@ function xhr(config: AxiosConfig): AxiosPromise {
 
         config,
       }
-      resolve(res);
+      // 根据状态码处理状态 为什么300也是失败
+      if(request.status>=200 && request.status<300) {
+        resolve(res);
+      }else{
+        reject(new Error(`Request failed with status code ${request.status}`))
+      }
     }
 
     // 处理请求头
@@ -37,6 +49,15 @@ function xhr(config: AxiosConfig): AxiosPromise {
       }
     }
     request.send(data);
+
+    // xhr发送异常
+    request.onerror = ()=>{
+      reject(new Error('Network Eroor'))
+    }
+    // xhr响应异常 超时
+    request.ontimeout = ()=>{
+      reject(new Error(`Timeout of ${timeout}ms exceeded`))
+    }
   })
 }
 

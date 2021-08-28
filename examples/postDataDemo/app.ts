@@ -2,7 +2,7 @@ import axios from '../../src/index'
 // 普通对象
 axios({
   method: 'post',
-  url: '/base/post',
+  url: '/base/post11',
   data: {
     a: 1,
     b: 2
