@@ -1,11 +1,11 @@
-import { transformResponse } from "./helper/data";
-import { processHeaders } from "./helper/header";
-import { transformRequestData } from "./helper/transformRequestData";
-import { buildUrl } from "./helper/url";
-import { AxiosConfig, AxiosPromise, AxiosResponse } from "./types";
-import xhr from "./core/xhr";
+import { transformResponse } from "../helper/data";
+import { processHeaders } from "../helper/header";
+import { transformRequestData } from "../helper/transformRequestData";
+import { buildUrl } from "../helper/url";
+import { AxiosConfig, AxiosPromise, AxiosResponse } from "../types";
+import xhr from "./xhr";
 
-function axios(config: AxiosConfig):AxiosPromise {
+function dispatchRequest(config: AxiosConfig):AxiosPromise {
   // TODO
   processConfig(config); // 处理请求参数
   return xhr(config).then(res=>{
@@ -38,4 +38,4 @@ function transformResponseData(res:AxiosResponse):AxiosResponse {
   return res;
 }
 
-export default axios
+export default dispatchRequest
