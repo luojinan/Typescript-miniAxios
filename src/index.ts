@@ -1,13 +1,16 @@
+import { transformResponse } from "./helper/data";
 import { processHeaders } from "./helper/header";
 import { transformRequestData } from "./helper/transformRequestData";
 import { buildUrl } from "./helper/url";
-import { AxiosConfig, AxiosPromise } from "./types";
+import { AxiosConfig, AxiosPromise, AxiosResponse } from "./types";
 import xhr from "./xhr";
 
 function axios(config: AxiosConfig):AxiosPromise {
   // TODO
   processConfig(config); // 处理请求参数
-  return xhr(config);
+  return xhr(config).then(res=>{
+    return transformResponseData(res);
+  });
 }
 
 // 利用浅拷贝直接修改原对象 不return值
@@ -28,6 +31,11 @@ function transformtData(config: AxiosConfig) {
 // 处理headers参数
 function transformtHeaders(config: AxiosConfig) {
   return processHeaders(config.headers = {}, config.data);
+}
+// 处理返回data数据
+function transformResponseData(res:AxiosResponse):AxiosResponse {
+  res.data = transformResponse(res.data);
+  return res;
 }
 
 export default axios

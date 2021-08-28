@@ -20,3 +20,22 @@ export function encodeValue(val:string):string {
   .replace(/%5B/gi, '[')
   .replace(/%5D/gi, ']');
 }
+
+export function parseHeaders(headersString: string) {
+  let newObj:any = {};
+  if(!headersString){
+    return newObj;
+  }
+
+  headersString.split('\r\n').forEach(item=>{
+    let [key,val] = item.split(':');
+    if(!key) {
+      return
+    }
+    if(val) {
+      val.trim();
+    }
+    newObj[key] = val;
+  })
+  return newObj;
+}

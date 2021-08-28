@@ -1,9 +1,10 @@
+import { parseHeaders } from "./helper/utils";
 import { AxiosConfig, AxiosPromise } from "./types";
 
 function xhr(config: AxiosConfig): AxiosPromise {
   return new Promise((resolve,reject)=>{
     // 接收参数method时，给个默认值，否则被字符串字面量类型校验异常
-    const { method = 'get', url, data, headers } = config;
+    const { method = 'get', url, data, headers, responseType } = config;
     const request = new XMLHttpRequest();
     request.open(method.toUpperCase(), url, true);
   
@@ -17,8 +18,8 @@ function xhr(config: AxiosConfig): AxiosPromise {
       const res = {
         status: request.status,
         statusText: request.statusText,
-        data: request.response,
-        headers: request.getAllResponseHeaders(),
+        data: responseType && responseType==='text'? request.responseText : request.response,
+        headers: parseHeaders(request.getAllResponseHeaders()),
 
         config,
       }
