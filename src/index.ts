@@ -1,13 +1,13 @@
 import { processHeaders } from "./helper/header";
 import { transformRequestData } from "./helper/transformRequestData";
 import { buildUrl } from "./helper/url";
-import { AxiosConfig } from "./types";
+import { AxiosConfig, AxiosPromise } from "./types";
 import xhr from "./xhr";
 
-function axios(config: AxiosConfig) {
+function axios(config: AxiosConfig):AxiosPromise {
   // TODO
   processConfig(config); // 处理请求参数
-  xhr(config);
+  return xhr(config);
 }
 
 // 利用浅拷贝直接修改原对象 不return值
