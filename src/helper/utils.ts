@@ -39,3 +39,12 @@ export function parseHeaders(headersString: string) {
   })
   return newObj;
 }
+
+// 合并函数和类形成混合对象类的工具方法 用断言辅助ts识别类型
+export function extend<T, U>(to: T, from: U): T & U {
+  for (const key in from) {
+    const fromItem = from[key] as any;
+    (to as T & U )[key] = fromItem
+  }
+  return to as T & U;
+}

@@ -1,41 +1,16 @@
-import { transformResponse } from "./helper/data";
-import { processHeaders } from "./helper/header";
-import { transformRequestData } from "./helper/transformRequestData";
-import { buildUrl } from "./helper/url";
-import { AxiosConfig, AxiosPromise, AxiosResponse } from "./types";
-import xhr from "./core/xhr";
+import AxiosClass from "./core/AxiosClass";
+import { extend } from "./helper/utils";
+import { AxiosConfig, AxiosInstance, AxiosPromise } from "./types";
 
-function axios(config: AxiosConfig):AxiosPromise {
-  // TODO
-  processConfig(config); // 处理请求参数
-  return xhr(config).then(res=>{
-    return transformResponseData(res);
-  });
+function createdInstance():AxiosInstance {
+  // 混合对象类,手动继承(拷贝类的所有属性和方法)
+  const from = new AxiosClass();
+  const to = AxiosClass.prototype.request.bind(from); // request内部用到了this因此需要修正
+
+  extend(to, from);
+  return to as AxiosInstance;
 }
 
-// 利用浅拷贝直接修改原对象 不return值
-function processConfig(config: AxiosConfig) {
-  config.url = transformUrl(config); // 1. 处理get请求的params参数到url
-  config.headers = transformtHeaders(config); // 2. 处理请求头参数(在data前，是因为要用到未转化为json的data)
-  config.data = transformtData(config); // 3. 处理post请求的data参数
-}
-
-// 处理params参数
-function transformUrl(config: AxiosConfig) {
-  return buildUrl(config.url, config.params);
-}
-// 处理data参数
-function transformtData(config: AxiosConfig) {
-  return transformRequestData(config.data);
-}
-// 处理headers参数
-function transformtHeaders(config: AxiosConfig) {
-  return processHeaders(config.headers = {}, config.data);
-}
-// 处理返回data数据
-function transformResponseData(res:AxiosResponse):AxiosResponse {
-  res.data = transformResponse(res.data);
-  return res;
-}
+const axios = createdInstance()
 
 export default axios

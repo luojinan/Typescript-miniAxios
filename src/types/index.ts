@@ -57,3 +57,9 @@ export interface AxiosClass {
 
   patch(url: string, data?: any, config?: AxiosConfig): AxiosPromise
 }
+
+
+// 混合对象类 axios实例
+export interface AxiosInstance extends AxiosClass {
+  (config: AxiosConfig):AxiosPromise
+}
